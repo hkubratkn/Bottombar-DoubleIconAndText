@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "241617069000",
+    "project_id": "baret-ca108",
+    "storage_bucket": "baret-ca108.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:241617069000:android:83a51d072a60c1b197d6fd",
+        "android_client_info": {
+          "package_name": "com.kapirti.baret"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "241617069000-k0spnh92pb83req1ul1fqjtclktd1v23.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBp6jwD8GTjNbEerKhLMiAsEa-wXvigK6Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "241617069000-k0spnh92pb83req1ul1fqjtclktd1v23.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-3006196735467220~8121322233"
+    }
+  ],
+  "configuration_version": "1"
+}
