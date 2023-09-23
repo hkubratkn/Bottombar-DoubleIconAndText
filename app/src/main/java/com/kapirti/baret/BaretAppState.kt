@@ -1,14 +1,26 @@
 package com.kapirti.baret
-/**
+
 import android.content.res.Resources
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import com.kapirti.baret.common.snackbar.SnackbarManager
-import com.kapirti.baret.common.snackbar.SnackbarMessage.Companion.toMessage
+import androidx.navigation.NavOptions
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navOptions
+import com.kapirti.baret.core.constants.Constants.ADD_SCREEN
+import com.kapirti.baret.core.constants.Constants.HOME_SCREEN
+import com.kapirti.baret.core.constants.Constants.PROFILE_SCREEN
+import com.kapirti.baret.core.constants.Constants.SEARCH_SCREEN
+import com.kapirti.baret.ui.navigation.BottomBarScreen.ADD
+import com.kapirti.baret.ui.navigation.BottomBarScreen.SEARCH
+import com.kapirti.baret.ui.navigation.BottomBarScreen.HOME
+import com.kapirti.baret.ui.navigation.BottomBarScreen.PROFILE
 import com.kapirti.baret.core.data.NetworkMonitor
+import com.kapirti.baret.ui.navigation.BottomBarScreen
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -16,11 +28,23 @@ import kotlinx.coroutines.flow.stateIn
 @Stable
 class BaretAppState(
     val navController: NavHostController,
-    private val snackbarManager: SnackbarManager,
-    private val resources: Resources,
-    coroutineScope: CoroutineScope,
+    val coroutineScope: CoroutineScope,
     networkMonitor: NetworkMonitor,
+    private val resources: Resources,
 ) {
+    val currentDestination: NavDestination?
+        @Composable get() = navController
+            .currentBackStackEntryAsState().value?.destination
+
+    val currentBottomBarScreen: BottomBarScreen?
+        @Composable get() = when (currentDestination?.route) {
+            HOME_SCREEN -> HOME
+            SEARCH_SCREEN -> SEARCH
+            ADD_SCREEN -> ADD
+            PROFILE_SCREEN -> PROFILE
+            else -> null
+        }
+
     val isOffline = networkMonitor.isOnline
         .map(Boolean::not)
         .stateIn(
@@ -29,14 +53,31 @@ class BaretAppState(
             initialValue = false,
         )
 
-    init {
-        coroutineScope.launch {
-            snackbarManager.snackbarMessages.filterNotNull().collect { snackbarMessage ->
-                val text = snackbarMessage.toMessage(resources)
-//                scaffoldState.snackbarHostState.showSnackbar(text)
+    val bottomBarScreens: List<BottomBarScreen> = BottomBarScreen.values().asList()
+
+    fun navigateToTopLevelDestination(bottomBarScreen: BottomBarScreen) {
+       // trace("Navigation: ${topLevelDestination.name}") {
+            val topLevelNavOptions = navOptions {
+                // Pop up to the start destination of the graph to
+                // avoid building up a large stack of destinations
+                // on the back stack as users select items
+                popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
+                }
+                // Avoid multiple copies of the same destination when
+                // reselecting the same item
+                launchSingleTop = true
+                // Restore state when reselecting a previously selected item
+                restoreState = true
+            }
+
+            when (bottomBarScreen) {
+                HOME -> navController.navigateToHome(topLevelNavOptions)
+                SEARCH -> navController.navigateToSearch(topLevelNavOptions)
+                ADD -> navController.navigateToAdd(topLevelNavOptions)
+                PROFILE -> navController.navigateToProfile(topLevelNavOptions)
             }
         }
-    }
 
     fun popUp() {
         navController.popBackStack()
@@ -59,104 +100,20 @@ class BaretAppState(
             popUpTo(0) { inclusive = true }
         }
     }
-}*/
-
-
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navOptions
-import com.kapirti.baret.ui.navigation.TopLevelDestination.BOOKMARKS
-import com.kapirti.baret.ui.navigation.TopLevelDestination.FOR_YOU
-import com.kapirti.baret.ui.navigation.TopLevelDestination.INTERESTS
-import com.kapirti.baret.core.data.NetworkMonitor
-import com.kapirti.baret.ui.navigation.TopLevelDestination
-import com.kapirti.baret.ui.navigation.bookmarksRoute
-import com.kapirti.baret.ui.navigation.interestsRoute
-import com.kapirti.baret.ui.navigation.navigateToForYou
-import com.kapirti.baret.ui.navigation.navigateToInterestsGraph
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
-
-@Composable
-fun rememberNiaAppState(
-    networkMonitor: NetworkMonitor,
-    coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    navController: NavHostController = rememberNavController(),
-): NiaAppState {
-    return remember(
-        navController,
-        coroutineScope,
-        networkMonitor,
-    ) {
-        NiaAppState(
-            navController,
-            coroutineScope,
-            networkMonitor,
-        )
-    }
 }
 
-@Stable
-class NiaAppState(
-    val navController: NavHostController,
-    val coroutineScope: CoroutineScope,
-    networkMonitor: NetworkMonitor,
-) {
-    val currentDestination: NavDestination?
-        @Composable get() = navController
-            .currentBackStackEntryAsState().value?.destination
+private fun NavController.navigateToHome(navOptions: NavOptions? = null) {
+    this.navigate(HOME_SCREEN, navOptions)
+}
 
-    val currentTopLevelDestination: TopLevelDestination?
-        @Composable get() = when (currentDestination?.route) {
-//            forYouNavigationRoute -> FOR_YOU
-            bookmarksRoute -> BOOKMARKS
-            interestsRoute -> INTERESTS
-            else -> null
-        }
+private fun NavController.navigateToSearch(navOptions: NavOptions? = null) {
+    this.navigate(SEARCH_SCREEN, navOptions)
+}
 
-    val isOffline = networkMonitor.isOnline
-        .map(Boolean::not)
-        .stateIn(
-            scope = coroutineScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = false,
-        )
+private fun NavController.navigateToAdd(navOptions: NavOptions? = null) {
+    this.navigate(ADD_SCREEN, navOptions)
+}
 
-    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().asList()
-
-    fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestination) {
-       // trace("Navigation: ${topLevelDestination.name}") {
-            val topLevelNavOptions = navOptions {
-                // Pop up to the start destination of the graph to
-                // avoid building up a large stack of destinations
-                // on the back stack as users select items
-                popUpTo(navController.graph.findStartDestination().id) {
-                    saveState = true
-                }
-                // Avoid multiple copies of the same destination when
-                // reselecting the same item
-                launchSingleTop = true
-                // Restore state when reselecting a previously selected item
-                restoreState = true
-            }
-
-            when (topLevelDestination) {
-                FOR_YOU -> navController.navigateToForYou(topLevelNavOptions)
-                BOOKMARKS -> {}//navController.navigateToBookmarks(topLevelNavOptions)
-                INTERESTS -> navController.navigateToInterestsGraph(topLevelNavOptions)
-            }
-        }
-//    }
+private fun NavController.navigateToProfile(navOptions: NavOptions? = null) {
+    this.navigate(PROFILE_SCREEN, navOptions)
 }

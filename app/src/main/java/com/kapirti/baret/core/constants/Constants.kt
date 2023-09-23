@@ -2,7 +2,6 @@ package com.kapirti.baret.core.constants
 
 object Constants {
     /**
-    const val ADS_APP_OPEN_ID = "ca-app-pub-3006196735467220/7140843675"
     const val ADS_LOG_IN_BANNER_ID = "ca-app-pub-3006196735467220/5634960665"
     const val ADS_REGISTER_BANNER_ID = "ca-app-pub-3006196735467220/8807918915"
     const val ADS_SETTINGS_BANNER_ID = "ca-app-pub-3006196735467220/2731549436"
@@ -12,9 +11,12 @@ object Constants {
     const val ADS_BOOKMARK_BANNER_ID = "ca-app-pub-3006196735467220/5461901978"
     const val ADS_PROFILE_BANNER_ID = "ca-app-pub-3006196735467220/9929428890"
      * */
-    const val ADS_APP_OPEN_ID = ""
+
+    const val ADS_APP_OPEN_ID = "ca-app-pub-3006196735467220/7140843675"
     const val ADS_LOG_IN_BANNER_ID = ""
     const val ADS_REGISTER_BANNER_ID = ""
+    const val ADS_EDIT_BANNER_ID = ""
+    const val ADS_USER_PROFILE_BANNER_ID = ""
     const val ADS_SETTINGS_BANNER_ID = ""
 
     const val ADS_HOME_BANNER_ID = ""
@@ -28,6 +30,8 @@ object Constants {
     const val SHARE_CODE = "https://play.google.com/store/apps/details?id=com.kapirti.baret"
     const val CONTENT_ANIMATION_DURATION = 300
 
+    const val RENT = "RENT"
+    const val SELL = "SELL"
 
     const val SPLASH_SCREEN = "SplashScreen"
     const val WELCOME_SCREEN = "WelcomeScreen"

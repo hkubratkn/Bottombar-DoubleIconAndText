@@ -16,7 +16,7 @@ abstract class ServiceModule {
 
     @Binds abstract fun provideFirestoreService(impl: FirestoreServiceImpl): FirestoreService
 
-  //  @Binds abstract fun provideStorageService(impl: StorageServiceImpl): StorageService
+    @Binds abstract fun provideStorageService(impl: StorageServiceImpl): StorageService
 
-//    @Binds abstract fun provideConfigurationService(impl: ConfigurationServiceImpl): ConfigurationService
+   @Binds abstract fun provideConfigurationService(impl: ConfigurationServiceImpl): ConfigurationService
 }

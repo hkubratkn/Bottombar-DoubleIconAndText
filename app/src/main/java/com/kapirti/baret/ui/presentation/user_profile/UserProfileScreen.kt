@@ -1,5 +1,5 @@
 package com.kapirti.baret.ui.presentation.user_profile
-/**
+
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Chat
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +24,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.lerp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.firebase.Timestamp
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
@@ -35,7 +38,6 @@ import kotlin.math.min
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -49,10 +51,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import com.kapirti.baret.common.composable.AdsBannerToolbar
 import com.kapirti.baret.common.composable.BaretSurface
 import com.kapirti.baret.common.composable.BasicDivider
+import com.kapirti.baret.common.composable.FabAnimation
 import com.kapirti.baret.common.composable.SurfaceImage
 import com.kapirti.baret.common.composable.arrowBackIcon
+import com.kapirti.baret.core.constants.Constants.ADS_USER_PROFILE_BANNER_ID
 import com.kapirti.baret.core.view_model.IncludeUserViewModel
 import com.kapirti.baret.model.User
 
@@ -72,6 +77,7 @@ fun UserProfileScreen(
     popUpScreen: () -> Unit,
     openAndPopUp: (String, String) -> Unit,
     includeUserViewModel: IncludeUserViewModel,
+    onShowSnackbar: suspend (String, String?) -> Boolean,
     modifier: Modifier = Modifier,
     viewModel: UserProfileViewModel = hiltViewModel(),
     nestedScrollInteropConnection: NestedScrollConnection = rememberNestedScrollInteropConnection()
@@ -105,7 +111,7 @@ fun UserProfileScreen(
         }
 
         val fabExtended by remember { derivedStateOf { scrollState.value == 0 } }
-     /**   FabW3(
+        FabAnimation(
             text = AppText.message,
             icon = Icons.Default.Chat,
             extended = fabExtended,
@@ -114,12 +120,12 @@ fun UserProfileScreen(
                 .offset(y = ((-100).dp)),
             onFabClicked = {
                 viewModel.onDoneClick(
-//                    text = "Talk to me!", who = viewModel.uid, chatId = chatId, openAndPopUp = openAndPopUp,
-  //                  partnerName = userName, partnerSurname = userSurname, partnerPhoto = userPhoto, partnerUid = userUid,
-    //                profileName = profileName, profileSurname = profileSurname, profilePhoto = profilePhoto
+               //     text = "Talk to me!", who = viewModel.uid, chatId = chatId, openAndPopUp = openAndPopUp,
+                 //   partnerName = userName, partnerSurname = userSurname, partnerPhoto = userPhoto, partnerUid = userUid,
+                   // profileName = profileName, profileSurname = profileSurname, profilePhoto = profilePhoto
                 )
             }
-        )*/
+        )
     }
 }
 
@@ -178,7 +184,7 @@ private fun Body(
                     Spacer(Modifier.height(16.dp))
                     Text(
                         text = stringResource(AppText.description),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.titleLarge,
                         color = Color(0x99000000),
                         modifier = HzPadding
                     )
@@ -199,7 +205,7 @@ private fun Body(
                     }
                     Text(
                         text = textButton,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         textAlign = TextAlign.Center,
                         color = Color(0xff005687),
                         modifier = Modifier
@@ -210,20 +216,19 @@ private fun Body(
                                 seeMore = !seeMore
                             }
                     )
-                    Spacer(Modifier.height(40.dp))
 
                     Spacer(Modifier.height(16.dp))
                     BasicDivider()
                     Spacer(Modifier.height(40.dp))
                     Text(
                         text = stringResource(AppText.join),
-                        style = MaterialTheme.typography.labelSmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = Color(0x99000000),
                         modifier = HzPadding
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
-                        text = "",//user?.let { itUser -> itUser.date?.let{ itLast -> timeCustomFormat(itLast.seconds) } } ?: "",
+                        text = /**user?.let { itUser -> itUser.date?.let{ itLast -> timeCustomFormat(itLast.seconds) } } ?:*/ "",
                         style = MaterialTheme.typography.bodyLarge,
                         color = Color(0x99000000),
                         modifier = HzPadding
@@ -233,8 +238,8 @@ private fun Body(
                         key(it.hobby) {
                             HobbyCollection(hobbys = it.hobby)
                         }
-                    }
-*/
+                    }*/
+
                     Spacer(
                         modifier = Modifier
                             .padding(bottom = BottomBarHeight)
@@ -270,29 +275,29 @@ private fun Title(user: User?, scrollProvider: () -> Int) {
         Spacer(Modifier.height(16.dp))
         Text(
             text = "age",
-            style = MaterialTheme.typography.displaySmall,
+            style = MaterialTheme.typography.displayMedium,
             color = Color(0xde000000),
             modifier = HzPadding
         )
         Text(
-            text = "", //"${user?.let{ it.name }} ${user?.let { it.surname }}",
-            style = MaterialTheme.typography.titleMedium,
+            text = "${user?.let{ it.name }} ${user?.let { it.surname }}",
+            style = MaterialTheme.typography.titleLarge,
             fontSize = 20.sp,
             color = Color.Black,//Color(0xbdffffff),
             modifier = HzPadding
         )
         Spacer(Modifier.height(4.dp))
         Text(
-            text = user?.let{
-/**                if(it.online){
+            text = /**user?.let{
+                if(it.online){
                     stringResource(id = AppText.online)
                 }else {
                     it.lastSeen?.let { itTime ->
                         timeCustomFormat(itTime.seconds)
                     }
-                }*/
-            } ?: "",
-            style = MaterialTheme.typography.bodySmall,
+                }
+            } ?:*/ "",
+            style = MaterialTheme.typography.displaySmall,
             color = Color(0xffded6fe),
             modifier = HzPadding
         )
@@ -370,12 +375,12 @@ private fun CartBottomBar(modifier: Modifier = Modifier) {
                     .then(HzPadding)
                     .heightIn(min = BottomBarHeight)
             ) {
-//                AdsBannerToolbar(ads = ADS_USER_PROFILE_BANNER_ID)
+                AdsBannerToolbar(ads = ADS_USER_PROFILE_BANNER_ID)
             }
         }
     }
 }
-*/
+
 /**
 @Composable
 private fun HobbyCollection(

@@ -19,7 +19,7 @@ class SearchViewModel @Inject constructor(
     val users = firestoreService.usersAll
     val recents = recentDao.recents()
 
-    fun onSearchClick(user: User, openScreen: (String) -> Unit,){
+    fun onSearchClick(user: User, openScreen: (String) -> Unit){
         launchCatching {
             recentDao.insert(Recent(displayName = user.displayName, photo = user.photo))
             openScreen(USER_PROFILE_SCREEN)

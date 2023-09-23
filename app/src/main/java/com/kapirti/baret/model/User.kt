@@ -9,7 +9,6 @@ data class User(
     val name: String = "",
     val surname: String = "",
     val photo: String = "",
-    val birthday: String = "",
     val contact: String = "",
     val description: String = "",
     val completed: Boolean = false,

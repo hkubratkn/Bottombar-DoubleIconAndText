@@ -1,10 +1,33 @@
 package com.kapirti.baret.model.service
 
+import com.kapirti.baret.model.Asset
+import com.kapirti.baret.model.AssetProfile
+import com.kapirti.baret.model.Feedback
 import com.kapirti.baret.model.User
 import kotlinx.coroutines.flow.Flow
 
 interface FirestoreService {
     val usersAll: Flow<List<User>>
+    val assets: Flow<List<Asset>>
+
+    suspend fun getUser(uid: String): User?
+
+    suspend fun saveUser(user: User)
+    suspend fun saveUserAsset(assetProfile: AssetProfile, uid: String)
+    suspend fun saveAsset(asset: Asset, type: String, city: Int, rentSell: String): String
+    suspend fun saveFeedback(feedback: Feedback)
+
+    suspend fun updateUserOnline(value: Boolean)
+    suspend fun updateUserLastSeen()
+    suspend fun updateUserToken(token: String)
+    suspend fun updateUserDisplayName(newValue: String)
+    suspend fun updateUserName(newValue: String)
+    suspend fun updateUserSurname(newValue: String)
+    suspend fun updateUserContact(newValue: String)
+    suspend fun updateUserDescription(newValue: String)
+    suspend fun updateUserPhoto(photo: String)
+
+    suspend fun deleteAccount()
 }
 /**
 package com.kapirti.baret.model.service
@@ -13,26 +36,13 @@ import com.kapirti.baret.model.Feedback
 import com.kapirti.baret.model.User
 import kotlinx.coroutines.flow.Flow
 
-suspend fun getUser(uid: String): User?
 //    suspend fun cars(type: String): Flow<List<Car>>
 
-suspend fun saveUser(user: User)
 //    suspend fun saveUserCar(userCar: UserCar)
 //    suspend fun saveCar(car: Car): String
-suspend fun saveFeedback(feedback: Feedback)
 
-suspend fun updateUserOnline(value: Boolean)
-suspend fun updateUserLastSeen()
-suspend fun updateUserToken(token: String)
-suspend fun updateUserDisplayName(newValue: String)
-suspend fun updateUserName(newValue: String)
-suspend fun updateUserSurname(newValue: String)
-suspend fun updateUserBirthday(newValue: String)
-suspend fun updateUserContact(newValue: String)
-suspend fun updateUserDescription(newValue: String)
-suspend fun updateUserPhoto(photo: String)
 
-suspend fun deleteAccount()
+
 }
 /**
 val usersAll: Flow<List<User>>

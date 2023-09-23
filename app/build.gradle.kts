@@ -16,8 +16,8 @@ android {
         applicationId = "com.kapirti.baret"
         minSdk = 22
         targetSdk = 34
-        versionCode = 111
-        versionName = "1.0"
+        versionCode = 32
+        versionName = "1.0.31"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -43,6 +43,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -87,15 +88,13 @@ dependencies {
     implementation("com.google.android.ump:user-messaging-platform:2.1.0")
     implementation("com.google.android.gms:play-services-ads:22.1.0")
 
-
-
-//    implementation 'androidx.compose.material:material-icons-extended:1.4.3'
-//    implementation 'com.google.android.material:material:1.9.0'
-
-
-
-
+    implementation("com.google.accompanist:accompanist-pager:0.24.2-alpha")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.24.2-alpha")
+    implementation("com.google.accompanist:accompanist-permissions:0.17.0")
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.17.0")
+    implementation("androidx.compose.material:material-icons-extended:1.4.3")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+    implementation("androidx.compose.ui:ui-util:1.4.3")
     implementation("io.coil-kt:coil-compose:2.3.0")
     implementation("com.google.android.play:review:2.0.0")
 

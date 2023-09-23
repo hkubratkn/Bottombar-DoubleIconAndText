@@ -50,9 +50,18 @@ import com.kapirti.baret.model.User
 import com.kapirti.baret.R.string as AppText
 
 @Composable
-fun SearchScreen(
+internal fun SearchRoute(
     openScreen: (String) -> Unit,
     includeUserViewModel: IncludeUserViewModel,
+    onShowSnackbar: suspend (String, String?) -> Boolean,
+    modifier: Modifier = Modifier,
+) { SearchScreen(openScreen = openScreen, includeUserViewModel = includeUserViewModel, onShowSnackbar = onShowSnackbar, modifier = modifier,) }
+
+@Composable
+private fun SearchScreen(
+    openScreen: (String) -> Unit,
+    includeUserViewModel: IncludeUserViewModel,
+    onShowSnackbar: suspend (String, String?) -> Boolean,
     modifier: Modifier = Modifier,
     viewModel: SearchViewModel = hiltViewModel(),
     state: SearchState = rememberSearchState()
